@@ -51,6 +51,8 @@ public class Neural {
     public void standardA0() {
         this.A0 = standardize(this.X);
     }
+
+    // Sets the expected results of the neural network (0 = not burger, 1 = burger)
     public double[][] setY(double[][] m) {
         for (int i = 0; i < 100; i++) {
             m[i][0] = 1;
@@ -60,12 +62,16 @@ public class Neural {
         }
         return m;
     }
+
+    // Adds the image arrays to the initial matrix used in layer 0
     public double[][] addToX(double[] insert, int j) {
             for (int i = 0; i < insert.length; i++) {
                 X[i][j] = insert[i];
             }
         return X;
     }
+
+    // Generates random numbers with a standard normal distribution 
     public double[][] randn(int rows, int columns) {
         double[][] m = new double[rows][columns];
         for (int i = 0; i < rows; i++) {
@@ -75,6 +81,8 @@ public class Neural {
         }
         return m;
     }
+
+    // Method that transposes a matrix
     public double[][] transpose(double[][] m) {
         double[][] mtrans = new double[m[0].length][m.length];
         for (int i = 0; i < m.length; i++) {
@@ -84,21 +92,12 @@ public class Neural {
         }
         return mtrans;
     }
-    public int[][] transpose(int[][] m) {
-        int[][] mtrans = new int[m[0].length][m.length];
-        for (int i = 0; i < m.length; i++) {
-            for (int j = 0; j < m[0].length; j++) {
-                mtrans[j][i] = m[i][j];
-            }
-        }
-        return mtrans;
-    }
+
+    // Method that returns the dimensions of a matrix
     public String shape(double[][] m) {
         return "(" + m.length + ", " + m[0].length + ")";
     }
-    public String shape(int[][] m) {
-        return "(" + m.length + ", " + m[0].length + ")";
-    }
+    //Applies the sigmoid function to each index in a matrix
     public double[][] sigmoid(double[][] m) {
         double[][] result = new double[m.length][m[0].length];
         for (int i = 0; i < m.length; i++) {
@@ -108,33 +107,8 @@ public class Neural {
         }
         return result;
     }
-    public double[][] ln(double[][] m) {
-        double[][] result = new double[m.length][m[0].length];
-        for (int i = 0; i < m.length; i++) {
-            for (int j = 0; j < m[0].length; j++) {
-                result[i][j] = Math.log(m[i][j]);
-            }
-        }
-        return result;
-    }
-    public double[][] oneMinus(double[][] m) {
-        double[][] result = new double[m.length][m[0].length];
-        for (int i = 0; i < m.length; i++) {
-            for (int j = 0; j < m[0].length; j++) {
-                result[i][j] = 1 - m[i][j];
-            }
-        }
-        return result;
-    }
-    public double[][] negative(double[][] m) {
-        double[][] result = new double[m.length][m[0].length];
-        for (int i = 0; i < m.length; i++) {
-            for (int j = 0; j < m[0].length; j++) {
-                result[i][j] = -1 * m[i][j];
-            }
-        }
-        return result;
-    }
+
+    //Computes the dot product of two matricies
     public double[][] multiply(double[][] m1, double[][] m2) {
         double[][] result = new double[m1.length][m2[0].length];
         for (int i = 0; i < m1.length; i++) {
@@ -148,6 +122,8 @@ public class Neural {
         }
         return result;
     }
+
+    // Adds two matricies together
     public double[][] add(double[][] m1, double [][] m2) {
         int columns = Math.max(m1[0].length, m2[0].length);
         double[][] result = new double[m1.length][columns];
@@ -158,6 +134,8 @@ public class Neural {
         }
         return result;
     }
+
+    // Combines all the values in the rows of a matrix into one column rows by summation
     public double[][] sum(double[][] m) {
         double[][] result = new double[m.length][1];
         for (int i = 0; i < m.length; i++) {
@@ -169,6 +147,7 @@ public class Neural {
         }
         return result;
     }
+    // Computes the cost of the current iteration of feedforward, the ultimate goal of the program is to lower this
     public double cost(double[][] y_hat, double[][] y) {
         int m = y_hat[0].length;
         double losses = 0;
@@ -180,6 +159,9 @@ public class Neural {
         double summed_losses = losses / m;
         return summed_losses;
     }
+
+    // Standardizes each value so that the sigmoid() function doesn't make them all 
+    // basically equal to 1 for positive numbers and 0 for negative numbers
     public double[][] standardize(double[][] m) {
         double[][] result = new double[m.length][m[0].length];
         for (int i = 0; i < m.length; i++) {
@@ -201,6 +183,9 @@ public class Neural {
         }
         return result;
     }
+
+    // The backprop methods all compute partial derivatives that lead 
+    // to the slight adjustments/improvements of the feedforward algorithm each iteration
     public matrixTrio backpropLayer3(double[][] y_hat, double[][] Y, int m, double[][] A2, double[][] W3) {
         double[][] A3 = y_hat;
         m = A3[0].length;
@@ -256,6 +241,8 @@ public class Neural {
         matrixDuo duo = new matrixDuo(dC_dW1, dC_db1);
         return duo;
     }
+
+    //The algorithm that an image goes through to determine whether it matches the training pattern or not
     public AMatricies feedForward(double[][] A0) {
         double[][] Z1 = add(multiply(W1, A0), b1);
         double[][] A1 = sigmoid(Z1);
@@ -266,6 +253,8 @@ public class Neural {
         AMatricies As = new AMatricies(A3, A2, A1, A0);
         return As;
     }
+
+    //Small separate method so the weights and biases are cleanly adjusted
     public double[][] gradientUpdates(double[][] m, double alpha, double[][] n) {
         for (int i = 0; i < m.length; i++) {
             for (int j = 0; j < m[0].length; j++) {
@@ -274,6 +263,8 @@ public class Neural {
         }
         return m;
     }
+
+    //The method that uses backpropogation to adjust the weights
     public ArrayList<Double> train() {
         int epochs = 100;
         double alpha = 1;
@@ -307,8 +298,11 @@ public class Neural {
         return costs;
     }
     public static void main(String[] args) {
+        //Constructors
         Neural net = new Neural();
         ImagePrep imagePrep = new ImagePrep();
+
+        //Inserting data into the initial matrix inserted into the neural network's 0th layer
         for (int i = 1; i <= 100; i++) {
             String name = "C:\\Users\\jerom\\Downloads\\burger" + i + ".jpg";
             net.addToX(imagePrep.imageToData(name), i - 1);
@@ -322,11 +316,12 @@ public class Neural {
         net.Y = net.transpose(net.y);
         net.train();
 
-        // forward pass with the trained weights
+        // see what values the training algorithm ultimately ends on for the training images
         AMatricies As = net.feedForward(net.A0);
-        double[][] A3 = As.A3;            // shape (1, m = 10)
+        double[][] A3 = As.A3;            
         System.out.println(Arrays.toString(A3[0]));
 
+        //loop running through test images
         for (int i = 0; i < 100; i++) {
             String name = "C:\\Users\\jerom\\Downloads\\testburger" + (i + 1) + ".jpg";
             double[][] testm = new double[4096][1];
