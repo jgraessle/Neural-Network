@@ -1,16 +1,18 @@
 import javax.imageio.ImageIO;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Set;
 public class ImagePrep {
+
+    // Resizes images to 64x64 with precision and not runtime preferred
     public Image sizer(BufferedImage image) {
         Image resizedImage = image.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
         return resizedImage;
     }
+
+    // Reads in images
     public Image readInImage(String name) {
         BufferedImage image = null;
         try {
@@ -19,6 +21,8 @@ public class ImagePrep {
         Image resizedImage = sizer(image);
         return resizedImage;
     }
+
+    // Converts Image type to BufferedImage via Graphics
     public BufferedImage toBuffered(Image image) {
         BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_BYTE_GRAY);
         Graphics2D g = bufferedImage.createGraphics();
@@ -26,6 +30,8 @@ public class ImagePrep {
         g.dispose();
         return bufferedImage;
     }
+
+    //Converts the 64x64 image into an array 4096 grayscale values
     public double[] imageToData(String name) {
         Image image = readInImage(name);
         BufferedImage bimage = toBuffered(image);

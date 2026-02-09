@@ -3,6 +3,8 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class Neural {
+
+    // Global variables/initialization of Random for use in randn
     long seed = System.nanoTime();
     Random random = new Random(seed);
     int[] n = {4096, 128, 64, 1};
@@ -18,6 +20,8 @@ public class Neural {
     double[][] Y = transpose(y);
     double[] mean = new double [4096];
     double[] stdev = new double[4096];
+
+    //Various classes that store objects so that multiple matricies can be returned by one method
     class matrixTrio {
         double[][] W;
         double[][] b;
@@ -48,6 +52,8 @@ public class Neural {
             this.A0 = A0;
         }
     }
+
+    //Method that initializes A0 for use in the neural network
     public void standardA0() {
         this.A0 = standardize(this.X);
     }
@@ -304,7 +310,8 @@ public class Neural {
 
         //Inserting data into the initial matrix inserted into the neural network's 0th layer
         for (int i = 1; i <= 100; i++) {
-            String name = "C:\\Users\\jerom\\Downloads\\burger" + i + ".jpg";
+            // ENSURE IF YOU DO YOUR OWN TESTS TO CHANGE THE USER/PATH TO EACH IMAGE
+            String name = "C:\\Users\\jerom\\Downloads\\burger" + i + ".jpg"; 
             net.addToX(imagePrep.imageToData(name), i - 1);
         }
         for (int i = 1; i <=100; i++) {
@@ -323,7 +330,7 @@ public class Neural {
 
         //loop running through test images
         for (int i = 0; i < 100; i++) {
-            String name = "C:\\Users\\jerom\\Downloads\\testburger" + (i + 1) + ".jpg";
+            String name = "C:\\Users\\jerom\\Downloads\\testburger" + (i + 1) + ".jpg"; 
             double[][] testm = new double[4096][1];
             double[] imagea = imagePrep.imageToData(name);
             for (int j = 0; j < testm.length; j++) {
@@ -332,10 +339,10 @@ public class Neural {
             AMatricies testAs = net.feedForward(testm);
             double[][] A3test = testAs.A3;
             if (A3test[0][0] < 0.5) {
-                System.out.println("Image " + (i + 1) + " is not a burger. A3test[0][0] is " + A3test[0][0]);
+                System.out.println("Image " + (i + 1) + " is not a burger. \n A3test[0][0] is " + A3test[0][0] + "for this image \n");
             }
             else {
-                System.out.println("Image " + (i + 1) +" is a burger. A3test[0][0] is " + A3test[0][0]);
+                System.out.println("Image " + (i + 1) +" is a burger. \n A3test[0][0] is " + A3test[0][0] + "for this image \n");
             }
         }
     }
