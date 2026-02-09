@@ -339,10 +339,10 @@ public class Neural {
             AMatricies testAs = net.feedForward(testm);
             double[][] A3test = testAs.A3;
             if (A3test[0][0] < 0.5) {
-                System.out.println("Image " + (i + 1) + " is not a burger. \n A3test[0][0] is " + A3test[0][0] + "for this image \n");
+                System.out.println("Image " + (i + 1) + " is not a burger. \nA3test[0][0] is " + A3test[0][0] + " for this image \n");
             }
             else {
-                System.out.println("Image " + (i + 1) +" is a burger. \n A3test[0][0] is " + A3test[0][0] + "for this image \n");
+                System.out.println("Image " + (i + 1) +" is a burger. \nA3test[0][0] is " + A3test[0][0] + " for this image \n");
             }
         }
     }
